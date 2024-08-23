@@ -22,6 +22,6 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
             cd /home/ubuntu &&
-            echo "Hello github Actions
+            echo "Hello github Actions" >hello.txt
           "
 
