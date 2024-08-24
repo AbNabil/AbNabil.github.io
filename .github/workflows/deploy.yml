@@ -1,25 +1,26 @@
-name: Deploy to EC2
+name: Deploy
 
 on:
   push:
-    branches:
-      - main  # Replace with the branch you want to deploy from
+    branches: [ dev ]
 
 jobs:
-  deploy:
+  Deploy:
+    name: Deploy to EC2
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v2 
+      - name: Build & Deploy
+        env:
+            PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+            HOSTNAME: ${{secrets.SSH_HOST}}
+            USER_NAME: ${{secrets.USER_NAME}}
+      
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
 
-      - name: Execute remote commands on EC2
-        uses: appleboy/ssh-action@v0.1.4
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
             cd /home/ubuntu &&
-            echo "Hello GitHub Actions" > hello.txt
+            echo "Hello GitHub Actions" > hello.txt'
 
