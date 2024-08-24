@@ -10,7 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v2 
+      - uses: actions/checkout@v2
+        with:
+        submodules: false
       - name: Build & Deploy
         env:
             PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
